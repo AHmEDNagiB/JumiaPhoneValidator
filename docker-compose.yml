@@ -1,0 +1,23 @@
+version: '3'
+services:
+  springboot-app:
+    build:
+      context: ./JumiaPhoneValidator-backend
+      dockerfile: springDockerfile
+    image: jumia-phone-validator-service
+    container_name: jumiaPhoneValidatorService
+    ports:
+      - "8010:8010" # Forward the exposed port 8010 on the container to port 8010 on the host machine
+    restart: always
+  alngular-app:
+    build:
+      context: ./JumiaPhoneValidator-frontend
+      dockerfile: springDockerfile
+    image: jumia-phone-validator-ui
+    container_name: jumiaPhoneValidatorUI
+    ports:
+      - "80:4200" # Forward the exposed port 4200 on the container to port 4200 on the host machine
+    restart: always
+    depends_on:
+      - springboot-app
+

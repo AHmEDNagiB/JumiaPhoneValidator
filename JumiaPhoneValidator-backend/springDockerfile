@@ -1,0 +1,10 @@
+FROM  maven:3.6-openjdk-8-slim AS MAVEN_BUILD
+COPY . /usr/app/jumiaPhoneValidatorService
+WORKDIR /usr/app/jumiaPhoneValidatorService
+RUN mvn clean package -DskipTests
+FROM openjdk:8
+EXPOSE 8010
+COPY --from=MAVEN_BUILD /usr/app/jumiaPhoneValidatorService/target/*.jar /opt/target/
+COPY --from=MAVEN_BUILD /usr/app/jumiaPhoneValidatorService/target/classes/sample.db.txt /opt/target/
+WORKDIR /opt/target
+ENTRYPOINT ["java","-jar","jumiaPhoneValidatorService.jar"]
